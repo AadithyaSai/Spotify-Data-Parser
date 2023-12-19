@@ -17,8 +17,10 @@ def list_ranges(data):
         "master_metadata_album_album_name",
         "episode_name",
         "episode_show_name",
+        "spotify_track_uri",
         "spotify_episode_uri",
         "offline_timestamp",
+        "ip_addr_decrypted",
     )
 
     for key in data[0].keys():
@@ -57,9 +59,9 @@ def print_most_listened_days(data, data_range=30):
 
     times.sort(key=lambda time: time[1], reverse=True)
 
-    print(" Most Listened to days")
+    print(" Most Listened To days")
     print("-----------------------")
-    for count, time in enumerate(times[:size]):
+    for count, time in enumerate(times[:data_range]):
         print(f"{count+1 : >2}. {time[0]}: {timedelta(milliseconds=time[1])}")
 
 
@@ -110,7 +112,7 @@ def print_most_on_repeat_item(data, item, data_range=30):
         for song_name, group in grouped_data
     ]
 
-    print(" Most On Repeat Songs")
+    print(f" Most On Repeat {item}")
     print("----------------------")
 
     songs.sort(key=lambda song: song[1], reverse=True)
@@ -147,7 +149,9 @@ def print_item_time(data, item, item_name):
     if song:
         print(f"{song[0]}: {timedelta(milliseconds=song[1])}")
     else:
-        print(f"{item_name} does not exist!")
+        print(
+            f"{item_name} does not exist! Please note that the search is case sensitive and also counts special characters that may be present in an item's name"
+        )
 
 
 def print_item_count(data, item_name):
@@ -179,7 +183,9 @@ def print_item_count(data, item_name):
     if song:
         print(f"{song[0]}: {song[1]}")
     else:
-        print(f"{item_name} does not exist!")
+        print(
+            f"{item_name} does not exist! Please note that the search is case sensitive and also counts special characters that may be present in an item's name"
+        )
 
 
 def print_most_played_item_by_time(data, item, data_range=30):
@@ -204,7 +210,7 @@ def print_most_played_item_by_time(data, item, data_range=30):
         for song_name, group in grouped_data
     ]
 
-    print("total: ", timedelta(milliseconds=sum(time for _, time in songs)), "\n\n")
+    print("Total: ", timedelta(milliseconds=sum(time for _, time in songs)), "\n\n")
 
     songs.sort(key=lambda song: song[1], reverse=True)
     for count, song in enumerate(songs[:data_range]):
@@ -236,7 +242,7 @@ def print_most_played_item_by_count(data, item, data_range=30):
         for song_name, group in grouped_data
     ]
 
-    print("total: ", sum(time for _, time in songs), "\n\n")
+    print("Total: ", sum(time for _, time in songs), "\n\n")
 
     songs.sort(key=lambda song: song[1], reverse=True)
     for count, song in enumerate(songs[:data_range]):
@@ -275,7 +281,7 @@ def print_most_skipped_item(data, item, data_range=30):
         for song_name, group in grouped_data
     ]
 
-    print("total: ", sum(time for _, time in songs), "\n\n")
+    print("Total: ", sum(time for _, time in songs), "\n\n")
 
     songs.sort(key=lambda song: song[1], reverse=True)
     for count, song in enumerate(songs[:data_range]):
@@ -283,7 +289,7 @@ def print_most_skipped_item(data, item, data_range=30):
 
 
 if __name__ == "__main__":
-    file_names = [file_name for file_name in glob("./*.json")]
+    file_names = [file_name for file_name in glob("./Streaming_History_Audio*.json")]
     data = []
     for file_name in file_names:
         with open(file_name) as f:
