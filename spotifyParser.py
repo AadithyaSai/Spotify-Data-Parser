@@ -154,7 +154,7 @@ def print_item_time(data, item, item_name):
         )
 
 
-def print_item_count(data, item_name):
+def print_item_count(data, item, item_name):
     if item == "album":
         key_val = "master_metadata_album_album_name"
     elif item == "artist":
